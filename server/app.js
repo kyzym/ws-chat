@@ -23,18 +23,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-socketHandlers(io);
+const { WS_PORT = 7000 } = process.env;
 
-const { WS_PORT = 5000 } = process.env;
-
-httpServer.listen(WS_PORT, (err) => {
+const socket = httpServer.listen(WS_PORT, (err) => {
   if (err) {
     console.error(err);
     process.exit(1);
   }
 
-  console.log(`Server is listening on port ${WS_PORT}`.bgBlue);
+  console.log(`Socket is listening on port ${socket.address().port}`.bgBlue);
 });
+
+socketHandlers(io);
 
 app.use((_, res) => {
   res.status(404).json({ status: 'error', message: 'Invalid URL' });
