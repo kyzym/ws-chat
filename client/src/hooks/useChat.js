@@ -8,6 +8,7 @@ export const useChat = (username) => {
   const [messages, setMessages] = useState(() => {
     return savedMessages ? JSON.parse(savedMessages) : [];
   });
+
   const socketRef = useRef();
 
   useEffect(() => {
@@ -26,14 +27,14 @@ export const useChat = (username) => {
     if (!savedMessages) {
       fetchData();
     }
+  }, [savedMessages]);
 
+  useEffect(() => {
     if (username) {
       socketRef.current = io(SOCKET_URL, {
         transports: ['websocket'],
       });
-    }
 
-    if (socketRef.current) {
       socketRef.current.on('chatMessage', (message) => {
         setMessages((prevMessages) => {
           const updatedMessages = [...prevMessages, message];
@@ -51,14 +52,15 @@ export const useChat = (username) => {
           return updatedMessages;
         });
       });
-    }
 
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-      }
-    };
-  }, [savedMessages, username]);
+      return () => {
+        if (socketRef.current) {
+          socketRef.current.disconnect();
+          socketRef.current = null;
+        }
+      };
+    }
+  }, [username]);
 
   return { messages, socketRef, setMessages };
 };
