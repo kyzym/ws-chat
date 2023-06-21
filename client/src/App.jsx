@@ -12,29 +12,34 @@ const defaultTheme = createTheme();
 function App() {
   const [id, setId] = useState();
   const [username, setUsername] = useLocalStorage('username', null);
-  const [messages, setMessages] = useState([]);
+  const savedMessages = localStorage.getItem('messages');
+  const [messages, setMessages] = useState(() => {
+    return savedMessages ? JSON.parse(savedMessages) : [];
+  });
+
   const socketRef = useRef();
 
   const handleLogin = (username) => {
     setUsername(username);
-
-    socketRef.current = io('http://localhost:3000', {
-      transports: ['websocket'],
-    });
   };
 
   const handleDelete = (id) => {
-    if (id.toString().length < 24) {
-      socketRef.current.emit('deleteMessageClient', id);
-    } else {
-      socketRef.current.emit('deleteMessageServer', id);
+    if (socketRef.current) {
+      if (id.toString().length < 24) {
+        socketRef.current.emit('deleteMessageClient', id);
+      } else {
+        socketRef.current.emit('deleteMessageServer', id);
+      }
+      setMessages(messages.filter((message) => message._id !== id));
     }
-    setMessages(messages.filter((message) => message._id !== id));
   };
 
   const handleLogout = () => {
     setUsername(null);
-    socketRef.current.disconnect();
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+    }
+    window.localStorage.removeItem('messages');
   };
 
   const handleMessageSubmit = (message) => {
@@ -46,14 +51,14 @@ function App() {
         username,
       },
     };
-    socketRef.current.emit('chatMessage', newMessage);
+    if (socketRef.current) {
+      socketRef.current.emit('chatMessage', newMessage);
+    }
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const { data } = await axios.get('https://dummyjson.com/comments');
-        // setMessages(data.comments.splice(5, 5));
         const { data } = await axios.get('https://dummyjson.com/comments');
         const normalizedMessages = data.comments.splice(5, 5).map((message) => {
           return { _id: message.id, ...message };
@@ -64,26 +69,42 @@ function App() {
       }
     };
 
-    fetchData();
+    if (!savedMessages) {
+      fetchData();
+    }
 
-    socketRef.current = io('http://localhost:3000', {
-      transports: ['websocket'],
-    });
+    if (username) {
+      socketRef.current = io('http://localhost:3000', {
+        transports: ['websocket'],
+      });
+    }
 
-    socketRef.current.on('chatMessage', (message) => {
-      setMessages((messages) => [...messages, message]);
-    });
+    if (socketRef.current) {
+      socketRef.current.on('chatMessage', (message) => {
+        setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          localStorage.setItem('messages', JSON.stringify(updatedMessages));
+          return updatedMessages;
+        });
+      });
 
-    socketRef.current.on('deleteMessage', (messageId) => {
-      setMessages((messages) =>
-        messages.filter((message) => message._id !== messageId)
-      );
-    });
+      socketRef.current.on('deleteMessage', (messageId) => {
+        setMessages((prevMessages) => {
+          const updatedMessages = prevMessages.filter(
+            (message) => message._id !== messageId
+          );
+          localStorage.setItem('messages', JSON.stringify(updatedMessages));
+          return updatedMessages;
+        });
+      });
+    }
 
     return () => {
-      socketRef.current.disconnect();
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
     };
-  }, []);
+  }, [savedMessages, username]);
 
   return (
     <>
