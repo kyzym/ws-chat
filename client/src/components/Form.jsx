@@ -1,10 +1,13 @@
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SendIcon from '@mui/icons-material/Send';
+import { Box, Grid } from '@mui/material';
 import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { Box, Grid } from '@mui/material';
+import { useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export default function Form({
@@ -14,17 +17,29 @@ export default function Form({
   onSubmitMessage,
 }) {
   const [storedMessage, setStoredMessage] = useLocalStorage('message', '');
+  const [messageError, setMessageError] = useState(false);
+  const [usernameError, setUsernameError] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const userNameField = event.currentTarget.username;
     const username = userNameField.value.trim();
+    if (username === '') {
+      setUsernameError(true);
+      return;
+    }
+    setUsernameError(false);
     onUsernameSubmit(username);
   };
 
   const handleMessageSubmit = (event) => {
     event.preventDefault();
     const message = storedMessage.trim();
+    if (message === '') {
+      setMessageError(true);
+      return;
+    }
+    setMessageError(false);
     onSubmitMessage(message);
     setStoredMessage('');
   };
@@ -38,10 +53,10 @@ export default function Form({
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="div">
       <CssBaseline />
       {username ? (
-        <div>
+        <Box>
           <Grid container alignItems="center" justifyContent="space-between">
             <Typography variant="h5">{username.toUpperCase()}</Typography>
             <Button
@@ -52,8 +67,10 @@ export default function Form({
               Logout
             </Button>
           </Grid>
-          <form onSubmit={handleMessageSubmit}>
+          <Box component="form" onSubmit={handleMessageSubmit}>
             <TextField
+              error={messageError}
+              helperText={messageError ? "Message can't be empty" : ''}
               margin="normal"
               required
               fullWidth
@@ -64,12 +81,23 @@ export default function Form({
               value={storedMessage}
               onChange={handleChange}
               autoComplete="off"
+              inputProps={{ style: { wordBreak: 'break-all' } }}
+              multiline
+              minRows={3}
             />
-            <Button type="submit" variant="contained">
+
+            {/* <Button type="submit" variant="contained" size="large">
+              Send
+            </Button> */}
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              endIcon={<SendIcon />}>
               Send
             </Button>
-          </form>
-        </div>
+          </Box>
+        </Box>
       ) : (
         <Box
           sx={{
@@ -80,12 +108,10 @@ export default function Form({
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
+              error={usernameError}
+              helperText={usernameError ? "Username can't be empty" : ''}
               margin="normal"
               required
               fullWidth
@@ -98,6 +124,7 @@ export default function Form({
               type="submit"
               fullWidth
               variant="contained"
+              startIcon={<LoginIcon />}
               sx={{ mt: 3, mb: 2 }}>
               Sign In
             </Button>

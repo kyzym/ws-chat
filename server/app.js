@@ -25,7 +25,7 @@ app.use(express.static('public'));
 
 socketHandlers(io);
 
-const WS_PORT = process.env.WS_PORT;
+const { WS_PORT = 5000 } = process.env;
 
 httpServer.listen(WS_PORT, (err) => {
   if (err) {
