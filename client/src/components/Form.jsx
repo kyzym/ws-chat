@@ -92,16 +92,15 @@ export default function Form({
               minRows={2}
             />
 
-            {/* <Button type="submit" variant="contained" size="large">
-              Send
-            </Button> */}
-            <Button
-              type="submit"
-              variant="contained"
-              size="large"
-              endIcon={<SendIcon />}>
-              Send
-            </Button>
+            <Grid container justifyContent="center" sx={{ mt: 2 }}>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                endIcon={<SendIcon />}>
+                Send
+              </Button>
+            </Grid>
           </Box>
         </Box>
       ) : (
