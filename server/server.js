@@ -5,14 +5,14 @@ require('dotenv').config({
 require('colors');
 
 const { PORT = 4000 } = process.env;
-const app = require('./app');
+const { httpServer } = require('./app');
 const connectDb = require('./config/db');
 
 (async () => {
   await connectDb();
 })();
 
-const server = app.listen(PORT, () => {
+const server = httpServer.listen(PORT, () => {
   console.log(
     `Server is running. Use this API on port: ${server.address().port}`.green
       .italic

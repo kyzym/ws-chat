@@ -23,17 +23,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-const { WS_PORT = 7000 } = process.env;
-
-const socket = httpServer.listen(WS_PORT, (err) => {
-  if (err) {
-    console.error(err);
-    process.exit(1);
-  }
-
-  console.log(`Socket is listening on port ${socket.address().port}`.bgBlue);
-});
-
 socketHandlers(io);
 
 app.use((_, res) => {
@@ -45,4 +34,4 @@ app.use((err, _, res, next) => {
   res.status(status).json({ message: err.message });
 });
 
-module.exports = app;
+module.exports = { app, httpServer };
