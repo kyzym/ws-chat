@@ -15,7 +15,7 @@ export const useChat = (username) => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(API_URL);
-        const normalizedMessages = data.comments.splice(5, 5).map((message) => {
+        const normalizedMessages = data.comments.map((message) => {
           return { _id: message.id, ...message };
         });
         setMessages(normalizedMessages);
