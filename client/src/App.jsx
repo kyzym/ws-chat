@@ -55,7 +55,16 @@ function App() {
   return (
     <>
       <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="md">
+        <Container
+          component="main"
+          maxWidth="md"
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-evenly',
+            height: '100vh',
+            padding: '1rem',
+          }}>
           <ChatComponent
             messages={messages}
             onDelete={handleDelete}

@@ -53,7 +53,13 @@ export default function Form({
   };
 
   return (
-    <Container component="div">
+    <Container
+      component="div"
+      sx={{
+        mb: 3,
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
       <CssBaseline />
       {username ? (
         <Box>
@@ -83,7 +89,7 @@ export default function Form({
               autoComplete="off"
               inputProps={{ style: { wordBreak: 'break-all' } }}
               multiline
-              minRows={3}
+              minRows={2}
             />
 
             {/* <Button type="submit" variant="contained" size="large">
