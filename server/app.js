@@ -1,6 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 const { createServer } = require('http');
 const { Server } = require('socket.io');
@@ -32,10 +33,63 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('deleteMessage', async (messageId) => {
+  // socket.on('deleteMessage', async (messageId) => {
+  //   try {
+  //     await Comment.deleteOne({ _id: messageId });
+  //     console.log('deleted');
+  //     io.emit('deleteMessage', messageId);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // });
+
+  // socket.on('deleteMessage', async (messageId) => {
+  //   try {
+  //     if (mongoose.Types.ObjectId.isValid(messageId)) {
+  //       await Comment.deleteOne({ _id: messageId });
+  //       console.log(`deleted`.green);
+  //       io.emit('deleteMessage', messageId);
+  //     } else {
+  //       console.log(
+  //         'This is not a valid MongoDB ObjectId. Deleting on the client side only'
+  //       );
+  //       io.emit('deleteMessage', messageId);
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // });
+
+  // socket.on('deleteMessage', async (messageId) => {
+  //   try {
+  //     if (mongoose.Types.ObjectId.isValid(messageId)) {
+  //       await Comment.deleteOne({ _id: messageId });
+  //       console.log('deleted');
+  //     } else {
+  //       console.log(
+  //         'This is not a valid MongoDB ObjectId. Deleting on the client side only'
+  //       );
+  //     }
+  //     // Emit deletion event in either case
+  //     io.emit('deleteMessage', messageId);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // });
+
+  socket.on('deleteMessageClient', (messageId) => {
+    console.log('Client-side delete only');
+    io.emit('deleteMessage', messageId);
+  });
+
+  socket.on('deleteMessageServer', async (messageId) => {
     try {
-      await Comment.deleteOne({ _id: messageId });
-      console.log('deleted');
+      if (mongoose.Types.ObjectId.isValid(messageId)) {
+        await Comment.deleteOne({ _id: messageId });
+        console.log('Server-side delete');
+      } else {
+        console.log('Not a valid ObjectId');
+      }
       io.emit('deleteMessage', messageId);
     } catch (error) {
       console.error(error);

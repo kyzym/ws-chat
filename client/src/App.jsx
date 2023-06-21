@@ -24,8 +24,11 @@ function App() {
   };
 
   const handleDelete = (id) => {
-    socketRef.current.emit('deleteMessage', id);
-
+    if (id.toString().length < 24) {
+      socketRef.current.emit('deleteMessageClient', id);
+    } else {
+      socketRef.current.emit('deleteMessageServer', id);
+    }
     setMessages(messages.filter((message) => message._id !== id));
   };
 
@@ -49,8 +52,13 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // const { data } = await axios.get('https://dummyjson.com/comments');
+        // setMessages(data.comments.splice(5, 5));
         const { data } = await axios.get('https://dummyjson.com/comments');
-        setMessages(data.comments.splice(5, 5));
+        const normalizedMessages = data.comments.splice(5, 5).map((message) => {
+          return { _id: message.id, ...message };
+        });
+        setMessages(normalizedMessages);
       } catch (error) {
         console.error(error);
       }
