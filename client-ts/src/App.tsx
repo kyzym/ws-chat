@@ -4,26 +4,25 @@ import {
   ThemeProvider,
   createTheme,
 } from '@mui/material';
-
-import './App.css';
-import { ChatComponent } from './components/Dashboard';
-import Form from './components/Form';
+import { ChatComponent } from './components/Chat';
+import { Form } from './components/Form';
 import { useChat } from './hooks/useChat';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { VALID_ID_LENGTH } from './constants';
+import { UserMessage } from './types';
 
 const defaultTheme = createTheme();
 
 function App() {
-  const [username, setUsername] = useLocalStorage('username', null);
+  const [username, setUsername] = useLocalStorage('username', '');
 
   const { messages, socketRef, setMessages } = useChat(username);
-  console.log(messages);
-  const handleLogin = (username) => {
+
+  const handleLogin = (username: string) => {
     setUsername(username);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id: string | number) => {
     if (socketRef.current) {
       if (id.toString().length < VALID_ID_LENGTH) {
         socketRef.current.emit('deleteMessageClient', id);
@@ -35,23 +34,26 @@ function App() {
   };
 
   const handleLogout = () => {
-    setUsername(null);
+    setUsername('');
     if (socketRef.current) {
       socketRef.current.disconnect();
     }
-    window.localStorage.removeItem('messages');
+    window.localStorage.clear();
   };
 
-  const handleMessageSubmit = (message) => {
-    const newMessage = {
-      body: message,
-      postId: new Date().toString(),
-      user: {
-        username,
-      },
-    };
-    if (socketRef.current) {
-      socketRef.current.emit('chatMessage', newMessage);
+  const handleMessageSubmit = (message: string) => {
+    if (username) {
+      console.log(username, 'in handleMessageSubmit');
+      const newMessage: UserMessage = {
+        body: message,
+        postId: new Date().toString(),
+        user: {
+          username,
+        },
+      };
+      if (socketRef.current) {
+        socketRef.current.emit('chatMessage', newMessage);
+      }
     }
   };
 
