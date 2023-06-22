@@ -43,7 +43,6 @@ function App() {
 
   const handleMessageSubmit = (message: string) => {
     if (username) {
-      console.log(username, 'in handleMessageSubmit');
       const newMessage: Omit<Message, '_id'> = {
         body: message,
         postId: new Date().toString(),

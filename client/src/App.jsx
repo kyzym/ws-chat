@@ -18,7 +18,7 @@ function App() {
   const [username, setUsername] = useLocalStorage('username', null);
 
   const { messages, socketRef, setMessages } = useChat(username);
-  console.log(messages);
+
   const handleLogin = (username) => {
     setUsername(username);
   };
