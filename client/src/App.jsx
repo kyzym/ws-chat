@@ -1,4 +1,9 @@
-import { Container, ThemeProvider, createTheme } from '@mui/material';
+import {
+  CircularProgress,
+  Container,
+  ThemeProvider,
+  createTheme,
+} from '@mui/material';
 import { useState } from 'react';
 import './App.css';
 import { ChatComponent } from './components/Dashboard';
@@ -65,11 +70,15 @@ function App() {
             height: '100vh',
             padding: '1rem',
           }}>
-          <ChatComponent
-            messages={messages}
-            onDelete={handleDelete}
-            username={username}
-          />
+          {messages.length === 0 ? (
+            <CircularProgress sx={{ alignSelf: 'center' }} size="20%" />
+          ) : (
+            <ChatComponent
+              messages={messages}
+              onDelete={handleDelete}
+              username={username}
+            />
+          )}
           <Form
             onIdSubmit={setId}
             onUsernameSubmit={handleLogin}

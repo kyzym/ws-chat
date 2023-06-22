@@ -15,6 +15,7 @@ export const ChatComponent = ({ messages, onDelete, username }) => {
       sx={{
         overflowY: 'scroll',
         mb: 3,
+        p: 1,
       }}
       ref={scrollRef}>
       {messages &&
