@@ -6,7 +6,7 @@ WS-Chat is a monorepo that houses the client and server parts of a WebSocket-bas
 
 The client side of the application is developed using React and TypeScript and utilizes Vite for effective bundling. @mui/material has been chosen for UI components and user interactions. To dive into the client-side code, navigate to the `client-ts` folder.  📁
 
-On the server side, we've built a Node.js foundation, enhanced with Express. For the exchange of messages, we rely on Socket.io. MongoDB serves as our trusty database 🗄️, with Mongoose acting as a liaison for database interactions. You can find the server-side code in the `server` folder.
+On the server side, i've built a Node.js foundation, enhanced with Express. For the exchange of messages, we rely on Socket.io. MongoDB serves as our trusty database 🗄️, with Mongoose acting as a liaison for database interactions. You can find the server-side code in the `server` folder.
 
 Live Version 🌐
 Experience our chat application in action at <https://the-chat-front.onrender.com>
@@ -63,3 +63,6 @@ Each directory has its own npm scripts:
 Feel free to explore the codebase and raise any issues or suggestions. Your journey through our WebSocket Chat Application starts now!
 
 ![chat](image.png)
+
+Future Plans 🚀
+This application is always on the move! I'm currently planning to add user authentication and login features, a personal dashboard for each user, a record of the current user's message history, and a bundle of other cool features. So keep an eye out for what's coming next! 🧐
