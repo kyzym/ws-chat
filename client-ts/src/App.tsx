@@ -9,7 +9,7 @@ import { Form } from './components/Form';
 import { useChat } from './hooks/useChat';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { VALID_ID_LENGTH } from './constants';
-import { UserMessage } from './types';
+import { Message } from './types';
 
 const defaultTheme = createTheme();
 
@@ -44,7 +44,7 @@ function App() {
   const handleMessageSubmit = (message: string) => {
     if (username) {
       console.log(username, 'in handleMessageSubmit');
-      const newMessage: UserMessage = {
+      const newMessage: Omit<Message, '_id'> = {
         body: message,
         postId: new Date().toString(),
         user: {

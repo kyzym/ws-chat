@@ -12,13 +12,20 @@ export const useChat = (username: string) => {
 
   const socketRef = useRef<Socket | null>(null);
 
+  interface ServerMessage extends Omit<Message, '_id'> {
+    id: string;
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get<{ comments: Message[] }>(API_URL);
-        const normalizedMessages = data.comments.map((message) => {
-          return { _id: message.id, ...message };
+        const { data } = await axios.get<{ comments: ServerMessage[] }>(
+          API_URL
+        );
+        const normalizedMessages = data.comments.map(({ id, ...message }) => {
+          return { _id: id, ...message };
         });
+
         setMessages(normalizedMessages);
       } catch (error) {
         console.error(error);

@@ -1,10 +1,10 @@
 import { List } from '@mui/material';
 import { MessageItem } from './MessageItem';
 import { useRef, useEffect } from 'react';
-import { UsersMessage } from '../types';
+import { Messages } from '../types';
 
 interface ChatComponentProps {
-  messages: UsersMessage[];
+  messages: Messages;
   onDelete: (id: string | number) => void;
   username: string;
 }

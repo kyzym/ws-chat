@@ -11,10 +11,10 @@ import {
 } from '@mui/material';
 import { getInitials } from '../helpers/helpers';
 import { useTheme } from '@mui/material/styles';
-import { UsersMessage } from '../types';
+import { Message } from '../types';
 
 interface MessageItemProps {
-  message: UsersMessage;
+  message: Message;
   onDelete: (id: string | number) => void;
   username: string;
   index: number;
