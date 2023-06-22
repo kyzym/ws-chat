@@ -9,7 +9,7 @@ The client side of the application is developed using React and TypeScript and u
 On the server side, we've built a Node.js foundation, enhanced with Express. For the exchange of messages, we rely on Socket.io. MongoDB serves as our trusty database 🗄️, with Mongoose acting as a liaison for database interactions. You can find the server-side code in the `server` folder.
 
 Live Version 🌐
-Experience our chat application in action at <https://the-chat-front.onrender.com>!
+Experience our chat application in action at <https://the-chat-front.onrender.com>
 
 ## Installation 📥
 
