@@ -1,49 +1,53 @@
-# WS-Chat
+# WS-Chat 🚀
 
-Welcome to the WS-Chat repository!
+Welcome to the WS-Chat repository! 🎉
 
-WS-Chat is a monorepo consisting of the client and server parts of a WebSocket-based chat application. This project was solely developed by me.
+WS-Chat is a monorepo that houses the client and server parts of a WebSocket-based chat application. I embarked on this adventure alone, using the tools I had at my disposal. 🛠️
 
-The client side of the application is built with React and uses Vite for bundling. @mui/material is used for UI components and user interactions. The client-side code can be found in the `client` folder.
+The client side of the application is developed using React and TypeScript and utilizes Vite for effective bundling. @mui/material has been chosen for UI components and user interactions. To dive into the client-side code, navigate to the `client-ts` folder.  📁
 
-The server-side is Node.js-based and utilizes Express. Socket.io is used for message exchange. MongoDB serves as the database for this application, with Mongoose for handling database interactions. The server-side code resides in the `server` folder.
+On the server side, we've built a Node.js foundation, enhanced with Express. For the exchange of messages, we rely on Socket.io. MongoDB serves as our trusty database 🗄️, with Mongoose acting as a liaison for database interactions. You can find the server-side code in the `server` folder.
 
-## Installation
+Live Version 🌐
+Experience our chat application in action at <https://the-chat-front.onrender.com>!
 
-Before you start, make sure you have Node.js and npm installed.
+## Installation 📥
+
+Before you set sail, ensure you have Node.js and npm installed.
 
 ### Installing Dependencies
 
 1. Clone the repository
 2. Navigate into the repository directory
-3. Run `npm install` in both directories (`client` and `server`)
+3. Run `npm install` in both the `client-ts` and `server` directories
 
 ### Running the Application
 
-- **Client**: In the `client` directory, run `npm run dev` to start in development mode.
-- **Server**: In the `server` directory, run `npm run dev` to start the server in development mode.
+- **Client**: In the `client-ts` directory, execute `npm run dev` to start in development mode.
+- **Server**: In the `server` directory, execute `npm run dev` to start the server in development mode.
 
 Note: You will need to configure environment variables as per `.env.example`.
 
-## Scripts
+## Scripts 💻
 
 Each directory has its own npm scripts:
 
 **Client**:
 
 - `dev`: Starts the Vite server for development
-- `build`: Builds a production bundle
+- `build`: Compiles a production-ready bundle
 
 **Server**:
 
-- `start`: Starts the server in production mode
-- `dev`: Starts the server in development mode
+- `start`: Runs the server in production mode
+- `dev`: Runs the server in development mode
 
-## Dependencies
+## Dependencies  📚
 
 **Client**:
 
 - React and ReactDOM
+- TypeScript
 - Socket.io Client
 - @mui/material and @mui/icons-material
 - Vite, including plugins for React
@@ -54,9 +58,8 @@ Each directory has its own npm scripts:
 - Express
 - MongoDB and Mongoose
 - Socket.io
-- uuid
 - Additional utilities: cors, dotenv, morgan, colors, cross-env
 
-Enjoy exploring the codebase and feel free to raise any issues!
+Feel free to explore the codebase and raise any issues or suggestions. Your journey through our WebSocket Chat Application starts now!
 
 ![chat](image.png)
