@@ -12,15 +12,11 @@ import { VALID_ID_LENGTH } from './constants';
 import { Message } from './types';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { toast } from 'react-toastify';
-import { useState, useEffect } from 'react';
 
 const defaultTheme = createTheme();
 
 function App() {
   const [username, setUsername] = useLocalStorage('username', '');
-  const [prevMessageCount, setPrevMessageCount] = useState(0);
-  const [messageSent, setMessageSent] = useState(false);
 
   const { messages, socketRef, setMessages } = useChat(username);
 
@@ -58,28 +54,9 @@ function App() {
       };
       if (socketRef.current) {
         socketRef.current.emit('chatMessage', newMessage);
-        setPrevMessageCount(messages.length);
-        setMessageSent(true);
       }
     }
   };
-
-  // Here we check that the message has been added. There's no such thing as too many checks. 😊
-  useEffect(() => {
-    if (messageSent && prevMessageCount === messages.length) {
-      toast.warning(
-        'Our sockets might be taking a nap.😴 Please wait for 30 seconds and try again.',
-        {
-          autoClose: 5000,
-          closeOnClick: true,
-        }
-      );
-      setMessageSent(false);
-    } else if (messageSent) {
-      setMessageSent(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages.length]);
 
   return (
     <>
