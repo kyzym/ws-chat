@@ -10,6 +10,8 @@ import { useChat } from './hooks/useChat';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { VALID_ID_LENGTH } from './constants';
 import { Message } from './types';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const defaultTheme = createTheme();
 
@@ -85,6 +87,7 @@ function App() {
             onSubmitMessage={handleMessageSubmit}
           />
         </Container>
+        <ToastContainer autoClose={1500} />
       </ThemeProvider>
     </>
   );

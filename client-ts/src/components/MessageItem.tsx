@@ -12,6 +12,7 @@ import {
 import { getInitials } from '../helpers/helpers';
 import { useTheme } from '@mui/material/styles';
 import { Message } from '../types';
+import { toast } from 'react-toastify';
 
 interface MessageItemProps {
   message: Message;
@@ -27,6 +28,14 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   index,
 }) => {
   const theme = useTheme();
+
+  const handleDelete = () => {
+    if (username) {
+      onDelete(message._id);
+    } else {
+      toast.warn('Please sign in');
+    }
+  };
 
   return (
     <Paper
@@ -55,10 +64,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
           </Typography>
         )}
         <ListItemSecondaryAction>
-          <IconButton
-            edge="end"
-            aria-label="delete"
-            onClick={() => onDelete(message._id)}>
+          <IconButton edge="end" aria-label="delete" onClick={handleDelete}>
             <DeleteIcon />
           </IconButton>
         </ListItemSecondaryAction>
