@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { toast } from 'react-toastify';
 
 interface FormProps {
   onUsernameSubmit: (username: string) => void;
@@ -38,6 +39,7 @@ export const Form: React.FC<FormProps> = ({
     }
     setUsernameError(false);
     onUsernameSubmit(username);
+    toast(`Hello ${username} 🥳`);
   };
 
   const handleMessageSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -54,6 +56,7 @@ export const Form: React.FC<FormProps> = ({
 
   const handleLogout = () => {
     onLogout();
+    toast(`Goodbye ${username} 🥲`);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

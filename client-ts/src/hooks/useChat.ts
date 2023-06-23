@@ -3,6 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import axios from 'axios';
 import { API_URL, SOCKET_URL } from '../constants';
 import { Message, Messages } from '../types';
+import { toast } from 'react-toastify';
 
 export const useChat = (username: string) => {
   const savedMessages = localStorage.getItem('messages');
@@ -29,6 +30,10 @@ export const useChat = (username: string) => {
         setMessages(normalizedMessages);
       } catch (error) {
         console.error(error);
+
+        toast.error(
+          'Failed to fetch messages from server. Please refresh the page and try again.'
+        );
       }
     };
 
@@ -41,6 +46,20 @@ export const useChat = (username: string) => {
     if (username) {
       socketRef.current = io(SOCKET_URL, {
         transports: ['websocket'],
+      });
+
+      socketRef.current.on('connect_error', (error) => {
+        toast.error(
+          `The server for the backend fell asleep.Please wait 30 seconds.
+        Connection error: ${error.message}`,
+          {
+            autoClose: 10000,
+            closeOnClick: true,
+          }
+        );
+        console.log(
+          '----Most likely, the server for the backend fell asleep.Please wait 30 seconds.'
+        );
       });
 
       socketRef.current.on('chatMessage', (message) => {
