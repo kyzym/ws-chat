@@ -49,6 +49,14 @@ export const useChat = (username: string) => {
         timeout: 7000,
       });
 
+      socketRef.current.emit('userConnected', username);
+      socketRef.current.on('userConnected', (username) => {
+        toast(`${username} connected`, {
+          autoClose: 500,
+          position: 'top-left',
+        });
+      });
+
       socketRef.current.on('connect_error', (error) => {
         toast.error(
           `Connection error: ${error.message}   The server for the backend fell asleep.Please wait about one minute.
@@ -78,6 +86,13 @@ export const useChat = (username: string) => {
           );
           localStorage.setItem('messages', JSON.stringify(updatedMessages));
           return updatedMessages;
+        });
+      });
+
+      socketRef.current.on('userDisconnected', (username) => {
+        toast(`${username} disconnected`, {
+          autoClose: 500,
+          position: 'top-left',
         });
       });
 

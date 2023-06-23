@@ -5,6 +5,12 @@ module.exports = (io) => {
   io.on('connection', (socket) => {
     console.log(`user connected`.blue);
 
+    socket.on('userConnected', (username) => {
+      socket.username = username;
+      console.log(` ${username} connected `.blue.bold);
+      socket.broadcast.emit('userConnected', username);
+    });
+
     socket.on('chatMessage', async (message) => {
       try {
         const comment = Comment(message);
@@ -32,6 +38,12 @@ module.exports = (io) => {
       } catch (error) {
         console.error(error);
       }
+    });
+
+    socket.on('disconnect', () => {
+      let username = socket.username;
+      console.log(`${username} disconnected`.yellow.bold);
+      socket.broadcast.emit('userDisconnected', username);
     });
 
     socket.on('disconnect', () => {
