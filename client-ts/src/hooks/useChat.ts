@@ -46,15 +46,15 @@ export const useChat = (username: string) => {
     if (username) {
       socketRef.current = io(SOCKET_URL, {
         transports: ['websocket'],
-        timeout: 5000,
+        timeout: 7000,
       });
 
       socketRef.current.on('connect_error', (error) => {
         toast.error(
-          `Connection error: ${error.message}   The server for the backend fell asleep.Please sign in and wait 30 seconds.
+          `Connection error: ${error.message}   The server for the backend fell asleep.Please wait about one minute.
         `,
           {
-            autoClose: 10000,
+            autoClose: 12000,
             closeOnClick: true,
           }
         );
