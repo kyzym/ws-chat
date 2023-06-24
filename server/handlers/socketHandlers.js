@@ -3,11 +3,18 @@ const Comment = require('../models/commentSchema');
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
+    const countUsers = io.engine.clientsCount;
+    console.log(
+      `${countUsers} ${countUsers === 1 ? 'user' : 'users'} connected`
+    );
+
     console.log(`user connected`.blue);
 
     socket.on('userConnected', (username) => {
       socket.username = username;
+
       console.log(` ${username} connected `.blue.bold);
+
       socket.broadcast.emit('userConnected', username);
     });
 
@@ -40,14 +47,15 @@ module.exports = (io) => {
       }
     });
 
-    socket.on('disconnect', () => {
-      let username = socket.username;
-      console.log(`${username} disconnected`.yellow.bold);
-      socket.broadcast.emit('userDisconnected', username);
+    socket.on('userTyping', (username) => {
+      socket.broadcast.emit('userTyping', username);
     });
 
     socket.on('disconnect', () => {
-      console.log(`user disconnected`.yellow);
+      let username = socket.username;
+      console.log(`${username} disconnected`.yellow.bold);
+
+      socket.broadcast.emit('userDisconnected', username);
     });
   });
 };

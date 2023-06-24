@@ -1,7 +1,7 @@
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SendIcon from '@mui/icons-material/Send';
-import { Box, Grid } from '@mui/material';
+import { Box, CircularProgress, Grid, LinearProgress } from '@mui/material';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,6 +16,8 @@ interface FormProps {
   onLogout: () => void;
   username: string;
   onSubmitMessage: (message: string) => void;
+  onTyping: () => void;
+  typing: string;
 }
 
 export const Form: React.FC<FormProps> = ({
@@ -23,6 +25,8 @@ export const Form: React.FC<FormProps> = ({
   onLogout,
   username,
   onSubmitMessage,
+  onTyping,
+  typing,
 }) => {
   const [storedMessage, setStoredMessage] = useLocalStorage('message', '');
   const [messageError, setMessageError] = useState(false);
@@ -102,7 +106,17 @@ export const Form: React.FC<FormProps> = ({
               inputProps={{ style: { wordBreak: 'break-all' } }}
               multiline
               minRows={2}
+              onKeyDown={onTyping}
+              sx={{ mb: '0' }}
             />
+
+            <Grid container alignItems="center" height="5px">
+              {typing ? (
+                <Typography variant="body2" sx={{ ml: 1 }}>
+                  {typing + ' is typing...'}
+                </Typography>
+              ) : null}
+            </Grid>
 
             <Grid container justifyContent="center" sx={{ mt: 2 }}>
               <Button
@@ -137,6 +151,7 @@ export const Form: React.FC<FormProps> = ({
               name="username"
               autoFocus
             />
+
             <Button
               type="submit"
               fullWidth

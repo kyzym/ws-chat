@@ -18,7 +18,8 @@ const defaultTheme = createTheme();
 function App() {
   const [username, setUsername] = useLocalStorage('username', '');
 
-  const { messages, socketRef, setMessages } = useChat(username);
+  const { messages, socketRef, setMessages, handleTyping, typing } =
+    useChat(username);
 
   const handleLogin = (username: string) => {
     setUsername(username);
@@ -85,6 +86,8 @@ function App() {
             onLogout={handleLogout}
             username={username}
             onSubmitMessage={handleMessageSubmit}
+            onTyping={handleTyping}
+            typing={typing}
           />
         </Container>
         <ToastContainer autoClose={1500} />

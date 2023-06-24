@@ -10,12 +10,19 @@ export const useChat = (username: string) => {
   const [messages, setMessages] = useState<Messages>(() => {
     return savedMessages ? JSON.parse(savedMessages) : [];
   });
+  const [typing, setTyping] = useState('');
 
   const socketRef = useRef<Socket | null>(null);
 
   interface ServerMessage extends Omit<Message, '_id'> {
     id: string;
   }
+
+  const handleTyping = () => {
+    if (socketRef.current) {
+      socketRef.current.emit('userTyping', username);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,17 +64,19 @@ export const useChat = (username: string) => {
         });
       });
 
-      socketRef.current.on('connect_error', (error) => {
+      socketRef.current.once('connect_error', (error) => {
         toast.error(
-          `Connection error: ${error.message}   The server for the backend fell asleep.Please wait about one minute.
-        `,
+          `Connection error: ${error.message}
+    The server for the backend fell asleep.
+    Please push send btn and wait about one minute ⏲️.
+    `,
           {
-            autoClose: 12000,
+            autoClose: 30000,
             closeOnClick: true,
           }
         );
         console.log(
-          '----Most likely, the server for the backend fell asleep.Please wait 30 seconds.'
+          '----Most likely, the server for the backend fell asleep.Please wait 60 seconds.'
         );
       });
 
@@ -77,6 +86,13 @@ export const useChat = (username: string) => {
           localStorage.setItem('messages', JSON.stringify(updatedMessages));
           return updatedMessages;
         });
+      });
+
+      socketRef.current.on('userTyping', (username) => {
+        setTyping(username);
+        setTimeout(() => {
+          setTyping('');
+        }, 2000);
       });
 
       socketRef.current.on('deleteMessage', (messageId: number | string) => {
@@ -105,5 +121,5 @@ export const useChat = (username: string) => {
     }
   }, [username]);
 
-  return { messages, socketRef, setMessages };
+  return { messages, socketRef, setMessages, handleTyping, typing };
 };
