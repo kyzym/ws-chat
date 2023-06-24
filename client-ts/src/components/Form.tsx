@@ -1,15 +1,15 @@
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SendIcon from '@mui/icons-material/Send';
-import { Box, CircularProgress, Grid, LinearProgress } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
 import { toast } from 'react-toastify';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface FormProps {
   onUsernameSubmit: (username: string) => void;
