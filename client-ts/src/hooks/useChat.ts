@@ -22,7 +22,7 @@ export const useChat = (username: string) => {
 
   const handleTypingStop = debounce(() => {
     setTyping('');
-  }, 100);
+  }, 300);
 
   const handleTyping = throttle(() => {
     if (socketRef.current) {
