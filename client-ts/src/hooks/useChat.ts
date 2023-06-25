@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
-import { io, Socket } from 'socket.io-client';
 import axios from 'axios';
+import throttle from 'lodash.throttle';
+import { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Socket, io } from 'socket.io-client';
 import { API_URL, SOCKET_URL } from '../constants';
 import { Message, Messages } from '../types';
-import { toast } from 'react-toastify';
+import debounce from 'lodash.debounce';
 
 export const useChat = (username: string) => {
   const savedMessages = localStorage.getItem('messages');
@@ -18,11 +20,16 @@ export const useChat = (username: string) => {
     id: string;
   }
 
-  const handleTyping = () => {
+  const handleTypingStop = debounce(() => {
+    setTyping('');
+  }, 100);
+
+  const handleTyping = throttle(() => {
     if (socketRef.current) {
       socketRef.current.emit('userTyping', username);
+      handleTypingStop();
     }
-  };
+  }, 300);
 
   useEffect(() => {
     const fetchData = async () => {
