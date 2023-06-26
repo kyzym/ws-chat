@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import { Socket, io } from 'socket.io-client';
 import { API_URL, SOCKET_URL } from '../constants';
 import { Message, Messages } from '../types';
-import debounce from 'lodash.debounce';
 
 export const useChat = (username: string) => {
   const savedMessages = localStorage.getItem('messages');
@@ -15,21 +14,27 @@ export const useChat = (username: string) => {
   const [typing, setTyping] = useState('');
 
   const socketRef = useRef<Socket | null>(null);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   interface ServerMessage extends Omit<Message, '_id'> {
     id: string;
   }
 
-  const handleTypingStop = debounce(() => {
-    setTyping('');
-  }, 300);
-
   const handleTyping = throttle(() => {
     if (socketRef.current) {
       socketRef.current.emit('userTyping', username);
-      handleTypingStop();
+
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+
+      typingTimeoutRef.current = setTimeout(() => {
+        if (socketRef.current) {
+          socketRef.current.emit('userStoppedTyping', username);
+        }
+      }, 400);
     }
-  }, 300);
+  }, 200);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,9 +102,6 @@ export const useChat = (username: string) => {
 
       socketRef.current.on('userTyping', (username) => {
         setTyping(username);
-        setTimeout(() => {
-          setTyping('');
-        }, 2000);
       });
 
       socketRef.current.on('deleteMessage', (messageId: number | string) => {
@@ -110,6 +112,10 @@ export const useChat = (username: string) => {
           localStorage.setItem('messages', JSON.stringify(updatedMessages));
           return updatedMessages;
         });
+      });
+
+      socketRef.current.on('userStoppedTyping', () => {
+        setTyping('');
       });
 
       socketRef.current.on('userDisconnected', (username) => {
