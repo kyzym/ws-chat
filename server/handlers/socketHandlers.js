@@ -51,6 +51,10 @@ module.exports = (io) => {
       socket.broadcast.emit('userTyping', username);
     });
 
+    socket.on('userStoppedTyping', () => {
+      socket.broadcast.emit('userStoppedTyping');
+    });
+
     socket.on('disconnect', () => {
       let username = socket.username;
       console.log(`${username} disconnected`.yellow.bold);
