@@ -21,19 +21,15 @@ export const useChat = (username: string) => {
   }
 
   const handleTyping = throttle(() => {
-    if (socketRef.current) {
-      socketRef.current.emit('userTyping', username);
+    socketRef.current?.emit('userTyping', username);
 
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
-
-      typingTimeoutRef.current = setTimeout(() => {
-        if (socketRef.current) {
-          socketRef.current.emit('userStoppedTyping', username);
-        }
-      }, 400);
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
     }
+
+    typingTimeoutRef.current = setTimeout(() => {
+      socketRef.current?.emit('userStoppedTyping', username);
+    }, 400);
   }, 200);
 
   useEffect(() => {
@@ -126,10 +122,8 @@ export const useChat = (username: string) => {
       });
 
       return () => {
-        if (socketRef.current) {
-          socketRef.current.disconnect();
-          socketRef.current = null;
-        }
+        socketRef.current?.disconnect();
+        socketRef.current = null;
       };
     }
   }, [username]);

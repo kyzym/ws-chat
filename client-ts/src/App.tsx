@@ -32,15 +32,16 @@ function App() {
       } else {
         socketRef.current.emit('deleteMessageServer', id);
       }
+
       setMessages(messages.filter((message) => message._id !== id));
     }
   };
 
   const handleLogout = () => {
     setUsername('');
-    if (socketRef.current) {
-      socketRef.current.disconnect();
-    }
+
+    socketRef.current?.disconnect();
+
     window.localStorage.clear();
   };
 
@@ -53,9 +54,8 @@ function App() {
           username,
         },
       };
-      if (socketRef.current) {
-        socketRef.current.emit('chatMessage', newMessage);
-      }
+
+      socketRef.current?.emit('chatMessage', newMessage);
     }
   };
 

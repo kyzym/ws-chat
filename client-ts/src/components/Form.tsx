@@ -42,24 +42,31 @@ export const Form: React.FC<FormProps> = ({
       return;
     }
     setUsernameError(false);
+
     onUsernameSubmit(username);
+
     toast(`Hello ${username} 🥳`);
   };
 
   const handleMessageSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const message = storedMessage.trim();
+
     if (message === '') {
       setMessageError(true);
       return;
     }
+
     setMessageError(false);
+
     onSubmitMessage(message);
+
     setStoredMessage('');
   };
 
   const handleLogout = () => {
     onLogout();
+
     toast(`Goodbye ${username} 🥲`);
   };
 
