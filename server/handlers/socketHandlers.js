@@ -11,7 +11,7 @@ module.exports = (io) => {
     console.log(`user connected`.blue);
 
     socket.on('userConnected', (username) => {
-      socket.username = username;
+      socket.data.username = username;
 
       console.log(` ${username} connected `.blue.bold);
 
@@ -56,7 +56,7 @@ module.exports = (io) => {
     });
 
     socket.on('disconnect', () => {
-      let username = socket.username;
+      let username = socket.data.username;
       console.log(`${username} disconnected`.yellow.bold);
 
       socket.broadcast.emit('userDisconnected', username);
