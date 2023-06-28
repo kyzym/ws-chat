@@ -37,6 +37,7 @@ module.exports = (io) => {
       try {
         if (mongoose.Types.ObjectId.isValid(messageId)) {
           await Comment.deleteOne({ _id: messageId });
+
           console.log('Server-side delete');
         } else {
           console.log('Not a valid ObjectId');
